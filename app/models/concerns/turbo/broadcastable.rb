@@ -421,6 +421,26 @@ module Turbo::Broadcastable
     broadcast_update_later_to self, **rendering
   end
 
+  # Same as <tt>broadcast_before_to</tt> but run asynchronously via a <tt>Turbo::Streams::BroadcastJob</tt>.
+  def broadcast_before_later_to(*streamables, target: broadcast_target_default, **rendering)
+    Turbo::StreamsChannel.broadcast_before_later_to(*streamables, **extract_options_and_add_target(rendering, target: target)) unless suppressed_turbo_broadcasts?
+  end
+
+  # Same as <tt>#broadcast_before_later_to</tt>, but the designated stream is automatically set to the current model.
+  def broadcast_before_later(target: broadcast_target_default, **rendering)
+    broadcast_before_later_to self, target: target, **rendering
+  end
+
+  # Same as <tt>broadcast_after_to</tt> but run asynchronously via a <tt>Turbo::Streams::BroadcastJob</tt>.
+  def broadcast_after_later_to(*streamables, target: broadcast_target_default, **rendering)
+    Turbo::StreamsChannel.broadcast_after_later_to(*streamables, **extract_options_and_add_target(rendering, target: target)) unless suppressed_turbo_broadcasts?
+  end
+
+  # Same as <tt>#broadcast_after_later_to</tt>, but the designated stream is automatically set to the current model.
+  def broadcast_after_later(target: broadcast_target_default, **rendering)
+    broadcast_after_later_to self, target: target, **rendering
+  end
+
   # Same as <tt>broadcast_append_to</tt> but run asynchronously via a <tt>Turbo::Streams::BroadcastJob</tt>.
   def broadcast_append_later_to(*streamables, target: broadcast_target_default, **rendering)
     Turbo::StreamsChannel.broadcast_append_later_to(*streamables, **extract_options_and_add_target(rendering, target: target)) unless suppressed_turbo_broadcasts?

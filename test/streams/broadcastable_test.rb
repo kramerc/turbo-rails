@@ -590,9 +590,21 @@ class Turbo::SuppressingBroadcastsTest < ActionCable::Channel::TestCase
     end
   end
 
+  test "suppressing broadcasting before to stream later" do
+    assert_no_broadcasts_later_when_suppressing "stream" do
+      @message.broadcast_before_later_to "stream", target: "message_1"
+    end
+  end
+
   test "suppressing broadcasting after to stream now" do
     assert_no_broadcasts_when_suppressing "stream" do
       @message.broadcast_after_to "stream", target: "message_1"
+    end
+  end
+
+  test "suppressing broadcasting after to stream later" do
+    assert_no_broadcasts_later_when_suppressing "stream" do
+      @message.broadcast_after_later_to "stream", target: "message_1"
     end
   end
 
